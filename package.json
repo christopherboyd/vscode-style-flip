@@ -2,7 +2,12 @@
 	"name": "style-flip",
 	"displayName": "Style Flip",
 	"description": "Quickly switch between related JS and CSS files",
-	"version": "0.0.1",
+	"version": "0.1.0",
+	"publisher": "chbcc",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/chbcc/vscode-style-flip.git"
+	  },
 	"engines": {
 		"vscode": "^1.40.0"
 	},

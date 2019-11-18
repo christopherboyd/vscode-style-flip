@@ -21,6 +21,14 @@
     justify-content: center;
     font-size: calc(10px + 2vmin);
     color: white;
+
+    & .AppHeaderChildWithLongerName {
+        background-color: red;
+    }
+
+    & .AppHeaderChild.Enabled {
+        background-color: red;
+    }
 }
 
 .AppLink {

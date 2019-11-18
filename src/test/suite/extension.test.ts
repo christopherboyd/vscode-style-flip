@@ -51,4 +51,53 @@ suite('Extension Test Suite', () => {
 		match = await Utils.findCodeMatchingStyleName( missingFile );
 		assert.equal( match, undefined );
 	});
+
+	test('Parse Class Name At Cursor', async() => {
+		// css module like import
+		let testModules = '<img src={logo} className={ styles.AppLogo } alt="logo" />';
+		
+		let found = Utils.parseClassNameAtOffset( testModules, 0 );
+		assert.equal( found && found.className, '' );
+		assert.equal( found && found.importName, '' );
+
+		found = Utils.parseClassNameAtOffset( testModules, 1 );
+		assert.equal( found && found.importName, '' );
+		assert.equal( found && found.className, 'img' );
+
+		for ( let offset of [28, 33, 35, 39, 42 ] ) {
+			found = Utils.parseClassNameAtOffset( testModules, offset );
+			assert.equal( found && found.importName, 'styles' );
+			assert.equal( found && found.className, 'AppLogo' );
+		}
+
+		// standard style
+		let testCSS = '<img src={logo} className="AppLogo" alt="logo" />';
+		found = Utils.parseClassNameAtOffset( testCSS, 28 );
+		assert.equal( found && found.importName, '' );
+		assert.equal( found && found.className, 'AppLogo' );
+
+		// too much hierarchy
+		let testInvalid = '<img src={logo} className={ styles.AppLogo.Invalid } alt="logo" />';
+		found = Utils.parseClassNameAtOffset( testInvalid, 39 );
+		assert.equal( found && found.className, '' );
+		assert.equal( found && found.importName, '' );
+	});
+
+	test('Find Class Name In File', async() => {
+		let position = await Utils.findClassNameInStyleFile( sampleSCSS, 'DoesntExist' );
+		assert.equal( position.line, 0 );
+		assert.equal( position.character, 0 );
+
+		position = await Utils.findClassNameInStyleFile( sampleSCSS, 'App' );
+		assert.equal( position.line, 0 );
+		assert.equal( position.character, 0 );
+
+		position = await Utils.findClassNameInStyleFile( sampleSCSS, 'AppLogo' );
+		assert.equal( position.line, 8 );
+		assert.equal( position.character, 0 );
+
+		position = await Utils.findClassNameInStyleFile( sampleSCSS, 'AppHeaderChild' );
+		assert.equal( position.line, 28 );
+		assert.equal( position.character, 0 );
+	});
 });
