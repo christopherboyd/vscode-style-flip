@@ -19,6 +19,13 @@
 				"command": "styleflip.flip",
 				"title": "Style Flip"
 			}
+		],
+		"keybindings": [
+			{
+				"command": "styleflip.flip",
+				"key": "alt+o",
+				"when": "editorTextFocus"
+			}
 		]
 	},
 	"scripts": {

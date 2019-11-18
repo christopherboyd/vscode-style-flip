@@ -55,6 +55,9 @@ export class StyleFlip {
                 console.log( 'caught pick exception', e );
             }
         }
+        else {
+            vscode.window.setStatusBarMessage( '-- Style Flip: No Matching File --', 3000 );
+        }
     }
 
     private completeFlipToStyleFile( fileName: string, document: vscode.TextDocument ) {
