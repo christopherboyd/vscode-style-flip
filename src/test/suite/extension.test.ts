@@ -7,6 +7,7 @@ import { before } from 'mocha';
 const projectPath = path.join( __dirname, '../../..' );
 const samplesPath = path.join( projectPath, 'src/test/suite/samples' );
 const sampleJS = path.join( samplesPath, 'app.js' );
+const multipleIncludesJS = path.join( samplesPath, 'multiple.js' );
 const sampleSCSS = path.join( samplesPath, 'app.scss' );
 
 suite('Extension Test Suite', () => {
@@ -15,7 +16,7 @@ suite('Extension Test Suite', () => {
 	});
 
 	test('Find Imports', async () => {
-		let document = await vscode.workspace.openTextDocument( sampleJS );
+		let document = await vscode.workspace.openTextDocument( multipleIncludesJS );
 		let content = document.getText();
 
 		let imports = Utils.findAllImports( content );
@@ -36,7 +37,9 @@ suite('Extension Test Suite', () => {
 		let filePath = Utils.createPathToFile( './app.scss', sampleJS );
 		let editor = await Utils.openFileInWorkspace( filePath );
 		let expectedPath = path.join( samplesPath, './app.scss' );
-		assert.equal( editor.document.fileName.toLowerCase(), expectedPath.toLowerCase() );
+		assert.ok( editor != null );
+		if ( editor )
+			assert.equal( editor.document.fileName.toLowerCase(), expectedPath.toLowerCase() );
 	})
 
 	test('Find Matching Code File', async() => {

@@ -45,14 +45,22 @@ export function createPathToFile( relativePath: string, documentPath: string ): 
 /**
  * Opens the specified file in VS Code
  */
-export async function openFileInWorkspace( file: string, position?: vscode.Position ): Promise< vscode.TextEditor > {
+export async function openFileInWorkspace( file: string, position?: vscode.Position ): Promise< vscode.TextEditor | null > {
     let uri = vscode.Uri.file( file );
 
     let options: vscode.TextDocumentShowOptions = {};
     if ( position )
         options.selection = new vscode.Range( position, position );
-    
-    return await vscode.window.showTextDocument( uri, options );
+ 
+    try {
+        return await vscode.window.showTextDocument( uri, options );
+    }
+    catch( e: any ) {
+        let name = path.basename( file );
+        vscode.window.showErrorMessage( `Failed to open file: ${name}` );
+    }
+
+    return null;
 }
 
 /**
